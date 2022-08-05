@@ -13,7 +13,7 @@ namespace OnlineShop.Db
         public ProductsDbRepository(DatabaseContext databaseContext)
         {
             this.databaseContext = databaseContext;
-        }        
+        }
         public List<Product> GetAll()
         {
             return databaseContext.Products.Include(x => x.Images).ToList();
@@ -31,7 +31,7 @@ namespace OnlineShop.Db
         }
 
         public void Edit()
-        {            
+        {
             databaseContext.SaveChanges();
         }
         public void Delete(Guid id)
@@ -43,23 +43,7 @@ namespace OnlineShop.Db
 
         public List<Product> TryGetByName(string name)
         {
-            //    List<Product> findProducts = new List<Product>();
-            //    {
-
-
             return databaseContext.Products.Where(x => x.Name == name).Include(x => x.Images).ToList();
-                    
-                  
-
-            //    foreach (var product in databaseContext.Products)
-            //    {
-            //        if (product.Name.ToLower().Contains(name.ToLower()))
-            //        {
-            //            findProducts.Add(product.);
-            //        }
-            //    }
-            //}
-            //return findProducts;
         }
     }
 }
