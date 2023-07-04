@@ -3,6 +3,7 @@ using System;
 using OnlineShop.Db;
 using OnlineShopWebApp.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -18,28 +19,28 @@ namespace OnlineShopWebApp.Controllers
             this.cartsRepository = cartsRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var cart = cartsRepository.TryGetByUserId(Constants.UserId);
+            var cart = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
             return View(Mapping.ToCartViewModel(cart));
         }
-        public IActionResult Add(Guid productId)
+        public async Task<IActionResult> AddAsync(Guid productId)
         {
             var product = productsRepository.TryGetById(productId);
-            cartsRepository.Add(product, Constants.UserId);
+            await cartsRepository.AddAsync(product, Constants.UserId);
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(Guid itemId)
+        public async Task<IActionResult> DeleteAsync(Guid itemId)
         {
             var product = productsRepository.TryGetById(itemId);
-            cartsRepository.Delete(product, Constants.UserId);
+            await cartsRepository.DeleteAsync(product, Constants.UserId);
             return RedirectToAction("Index");
         }
 
-        public IActionResult Clear()
+        public async Task<IActionResult> ClearAsync()
         {
-            cartsRepository.Clear(Constants.UserId);
+            await cartsRepository.ClearAsync(Constants.UserId);
             return RedirectToAction("Index");
         }
     }

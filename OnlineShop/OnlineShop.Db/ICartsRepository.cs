@@ -1,12 +1,13 @@
 ﻿using OnlineShop.Db.Models;
+using System.Threading.Tasks;
 
 namespace OnlineShop.Db
 {
     public interface ICartsRepository
     {
-        Cart TryGetByUserId(string userId);
-        void Add(Product product, string userId);
-        void Delete(Product product, string userId);
-        void Clear(string userId);
+        Task<Cart> TryGetByUserIdAsync(string userId);
+        Task AddAsync(Product product, string userId);
+        Task DeleteAsync(Product product, string userId);
+        Task ClearAsync(string userId);
     }
 }

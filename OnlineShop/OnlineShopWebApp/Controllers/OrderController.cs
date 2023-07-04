@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
+using System.Threading.Tasks;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -24,13 +25,13 @@ namespace OnlineShopWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Buy(DeliveryInformationViewModel deliveryInformation)
+        public async Task<IActionResult> BuyAsync(DeliveryInformationViewModel deliveryInformation)
         {
             if (ModelState.IsValid)
             {
-                var cart = cartsRepository.TryGetByUserId(Constants.UserId);
+                var cart = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
                 ordersRepository.Add(cart.Items, Mapping.ToDbDelivery(deliveryInformation));
-                cartsRepository.Clear(Constants.UserId);
+                await cartsRepository.ClearAsync(Constants.UserId);
                 return View();
             }
             else
