@@ -1,14 +1,15 @@
 ﻿using OnlineShop.Db.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OnlineShop.Db
 {
     public interface IOrdersRepository
     {
-        List<Order> GetAll();
-        void Add(List<CartItem> items, DeliveryInformation deliveryInformarion);
-        Order TryGetById(Guid id);
-        void UpdateState(Guid orderId, OrderState state);
+        Task<List<Order>> GetAllAsync();
+        Task AddAsync(List<CartItem> items, DeliveryInformation deliveryInformation);
+        Task<Order> TryGetByIdAsync(Guid id);
+        Task UpdateStateAsync(Guid orderId, OrderState newState);
     }
 }

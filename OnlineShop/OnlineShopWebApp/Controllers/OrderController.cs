@@ -30,7 +30,7 @@ namespace OnlineShopWebApp.Controllers
             if (ModelState.IsValid)
             {
                 var cart = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
-                ordersRepository.Add(cart.Items, Mapping.ToDbDelivery(deliveryInformation));
+                await ordersRepository.AddAsync(cart.Items, Mapping.ToDbDelivery(deliveryInformation));
                 await cartsRepository.ClearAsync(Constants.UserId);
                 return View();
             }

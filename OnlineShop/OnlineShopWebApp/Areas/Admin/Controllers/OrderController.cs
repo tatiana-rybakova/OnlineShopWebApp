@@ -5,6 +5,7 @@ using OnlineShop.Db.Models;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
@@ -19,22 +20,22 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             this.ordersRepository = ordersRepository;
         }
 
-        public IActionResult Orders()
+        public async Task<IActionResult> OrdersAsync()
         {
-            var orders = ordersRepository.GetAll();
+            var orders = await ordersRepository.GetAllAsync();
             return View(orders.ToOrderViewModels());
         }
 
-        public IActionResult Details(Guid orderId)
+        public async Task<IActionResult> DetailsAsync(Guid orderId)
         {
-            var order = ordersRepository.TryGetById(orderId);
+            var order = await ordersRepository.TryGetByIdAsync(orderId);
             return View(order.ToOrderViewModel());
         }
 
         [HttpPost]
-        public IActionResult UpdateState(Guid orderId, OrderStateViewModel state)
+        public async Task<IActionResult> UpdateStatesync(Guid orderId, OrderStateViewModel state)
         {
-            ordersRepository.UpdateState(orderId, (OrderState)(int)state);
+            await ordersRepository.UpdateStateAsync(orderId, (OrderState)(int)state);
             return RedirectToAction("Orders");
         }
     }

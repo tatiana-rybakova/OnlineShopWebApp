@@ -2,7 +2,7 @@
 using OnlineShop.Db.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace OnlineShop.Db
 {
@@ -15,16 +15,16 @@ namespace OnlineShop.Db
             this.databaseContext = databaseContext;
         }
 
-        public List<Order> GetAll()
+        public async Task<List<Order>> GetAllAsync()
         {
-            return databaseContext.Orders.Include(x=>x.DeliveryInformation).Include(x=>x.Items).ThenInclude(x => x.Product).ToList();
+            return await databaseContext.Orders.Include(x=>x.DeliveryInformation).Include(x=>x.Items).ThenInclude(x => x.Product).ToListAsync();
         }
 
-        public Order TryGetById(Guid id)
+        public async Task<Order> TryGetByIdAsync(Guid id)
         {
-            return databaseContext.Orders.Include(x => x.DeliveryInformation).Include(x => x.Items).ThenInclude(x => x.Product).FirstOrDefault(x => x.Id == id);
+            return await databaseContext.Orders.Include(x => x.DeliveryInformation).Include(x => x.Items).ThenInclude(x => x.Product).FirstOrDefaultAsync(x => x.Id == id);
         }
-        public void Add(List<CartItem> items, DeliveryInformation deliveryInformation)
+        public async Task AddAsync(List<CartItem> items, DeliveryInformation deliveryInformation)
         {
             var newOrder = new Order
             {
@@ -35,17 +35,17 @@ namespace OnlineShop.Db
                 Time = DateTime.Now.ToString("HH:mm:ss")
             };
 
-            databaseContext.Orders.Add(newOrder);
-            databaseContext.SaveChanges();
+            await databaseContext.Orders.AddAsync(newOrder);
+            await databaseContext.SaveChangesAsync();
         }
 
-        public void UpdateState(Guid orderId, OrderState newState)
+        public async Task UpdateStateAsync(Guid orderId, OrderState newState)
         {
-            var existingOrder = TryGetById(orderId);
+            var existingOrder = await TryGetByIdAsync(orderId);
             if (existingOrder != null)
             {
                 existingOrder.State = newState;
-                databaseContext.SaveChanges();
+                await databaseContext.SaveChangesAsync();
             }
         }
     }
